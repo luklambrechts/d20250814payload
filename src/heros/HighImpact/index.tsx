@@ -20,7 +20,10 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
               {links.map(({ link }, i) => {
                 return (
                   <li key={i}>
-                    <CMSLink {...link} />
+                    <CMSLink
+                      {...link}
+                      className="border-2 border-[#A6372B] text-[#A6372B] bg-white hover:bg-[#A6372B] hover:text-white transition-colors duration-200 px-6 py-2 rounded"
+                    />
                   </li>
                 )
               })}
