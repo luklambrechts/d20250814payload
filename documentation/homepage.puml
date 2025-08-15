@@ -1,0 +1,76 @@
+@startuml homepage
+entity Page {
+  params: paramsPromise
+}
+entity PageClient {
+  { setHeaderTheme } = useHeaderTheme()
+  useEffect(() => {},[setHeaderTheme])
+}
+entity PayloadRedirects {
+  disableNotFound: boolean
+  url: string
+}
+entity LivePreviewListener {
+  router = useRouter()
+}
+entity RenderHero {
+  type
+}
+entity HighImpactHero {
+  links
+  media
+  richText
+}
+
+entity Media {
+  ClassFontName
+  htmlElement
+  resource
+}
+
+entity VideoMedia {
+  onClick
+  resource
+  videoClassName
+  --
+  useRef
+  useEffect
+}
+entity RenderBlocks
+entity ArchiveBlock {
+  id
+  categories
+  introContent
+  limit
+  populateBy
+  relationTo
+  selectedDocs
+}
+entity ContentBlock
+entity CallToActionBlock
+entity FormBlock
+entity MediaBlock
+
+
+Page --> PageClient
+Page --> PayloadRedirects
+Page --> LivePreviewListener
+Page --> RenderHero
+RenderHero --> HighImpactHero
+RenderHero --> LowImpactHero
+RenderHero --> MediumImpactHero
+HighImpactHero --> CMSLink
+CMSLink --> Button
+HighImpactHero --> Media
+Media --> VideoMedia
+Media --> ImageMedia
+HighImpactHero --> RichText
+Page --> RenderBlocks
+RenderBlocks --> ArchiveBlock
+RenderBlocks --> ContentBlock
+RenderBlocks --> CallToActionBlock
+RenderBlocks --> FormBlock
+RenderBlocks --> MediaBlock
+LivePreviewListener --> PayloadLivePreview
+
+@enduml
