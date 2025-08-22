@@ -95,6 +95,7 @@
 
 html {
   opacity: 0;
+  font-size: 18px; /* Increased base font size from 16px to 18px */
 }
 
 html[data-theme='dark'],
