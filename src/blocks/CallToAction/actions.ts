@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
+'use server'
+
 import { emailService } from '@/utilities/emailService'
 
-export async function POST(request: NextRequest) {
+export async function sendEmailAction(formData: FormData) {
+  const email = formData.get('email') as string
+
+  // Validate email
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { success: false, message: 'Invalid email address' }
+  }
+
   try {
-    const { email } = await request.json()
-
-    // Validate email
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({ message: 'Invalid email address' }, { status: 400 })
-    }
-
-    // Send email using the email service
     const success = await emailService.send({
       to: 'luk@lenoweb.be',
       from: process.env.EMAIL_FROM || 'noreply@yourdomain.com',
@@ -25,12 +25,12 @@ export async function POST(request: NextRequest) {
     })
 
     if (!success) {
-      return NextResponse.json({ message: 'Failed to send email' }, { status: 500 })
+      return { success: false, message: 'Failed to send email' }
     }
 
-    return NextResponse.json({ message: 'Email sent successfully' }, { status: 200 })
+    return { success: true, message: 'Email sent successfully' }
   } catch (error) {
     console.error('Error sending email:', error)
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
+    return { success: false, message: 'Internal server error' }
   }
 }

@@ -8,6 +8,7 @@ import { CMSLink } from '@/components/Link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { sendEmailAction } from './actions'
 
 export const CallToActionBlock: React.FC<CTABlockProps> = ({
   links,
@@ -20,33 +21,20 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!email || !emailField?.required) {
-      return
-    }
-
+  const handleEmailSubmit = async (formData: FormData) => {
     setIsSubmitting(true)
     setSubmitStatus('idle')
     setErrorMessage('')
 
     try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      })
+      const result = await sendEmailAction(formData)
 
-      if (response.ok) {
+      if (result.success) {
         setSubmitStatus('success')
         setEmail('')
       } else {
-        const errorData = await response.json()
         setSubmitStatus('error')
-        setErrorMessage(errorData.message || 'Failed to send email')
+        setErrorMessage(result.message || 'Failed to send email')
       }
     } catch (error) {
       setSubmitStatus('error')
@@ -64,8 +52,8 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
         </div>
         <div className="flex flex-col gap-8">
           {showEmailField && emailField && (
-            <form onSubmit={handleEmailSubmit} className="flex flex-col gap-4">
-              <div>
+            <form action={handleEmailSubmit} className="flex flex-col gap-4 w-full md:w-auto">
+              <div className="w-full md:w-auto">
                 <Label htmlFor="email">
                   {emailField.label}
                   {emailField.required && (
@@ -76,31 +64,36 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
                 </Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={emailField.placeholder}
-                  required={emailField.required}
+                  placeholder={emailField.placeholder || undefined}
+                  required={emailField.required || false}
                   disabled={isSubmitting}
-                  className="mt-2"
+                  className="mt-2 w-full"
                   size={emailField.size?.width || 40}
                   maxLength={emailField.size?.maxLength || 254}
-                  style={{
-                    width: `${(emailField.size?.width || 40) * 0.6}em`,
-                  }}
                 />
               </div>
-              <Button
-                type="submit"
-                disabled={isSubmitting || (emailField.required && !email)}
-                size="lg"
-              >
-                {isSubmitting ? 'Sending...' : emailField.buttonText}
-              </Button>
+              <div className="w-full flex justify-center md:justify-start">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || ((emailField.required || false) && !email)}
+                  size="lg"
+                  className="w-full md:w-auto"
+                >
+                  {isSubmitting ? 'Sending...' : emailField.buttonText}
+                </Button>
+              </div>
               {submitStatus === 'success' && (
-                <p className="text-green-600 text-sm">Email sent successfully!</p>
+                <p className="text-green-600 text-sm text-center md:text-left">
+                  Email sent successfully!
+                </p>
               )}
-              {submitStatus === 'error' && <p className="text-red-600 text-sm">{errorMessage}</p>}
+              {submitStatus === 'error' && (
+                <p className="text-red-600 text-sm text-center md:text-left">{errorMessage}</p>
+              )}
             </form>
           )}
           {links && links.length > 0 && (
