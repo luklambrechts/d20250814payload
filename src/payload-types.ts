@@ -412,6 +412,13 @@ export interface CallToActionBlock {
     };
     [k: string]: unknown;
   } | null;
+  showEmailField?: boolean | null;
+  emailField?: {
+    label?: string | null;
+    placeholder?: string | null;
+    buttonText?: string | null;
+    required?: boolean | null;
+  };
   links?:
     | {
         link: {
@@ -1046,6 +1053,15 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface CallToActionBlockSelect<T extends boolean = true> {
   richText?: T;
+  showEmailField?: T;
+  emailField?:
+    | T
+    | {
+        label?: T;
+        placeholder?: T;
+        buttonText?: T;
+        required?: T;
+      };
   links?:
     | T
     | {

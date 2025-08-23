@@ -28,6 +28,45 @@ export const CallToAction: Block = {
       }),
       label: false,
     },
+    {
+      name: 'showEmailField',
+      type: 'checkbox',
+      label: 'Show Email Input Field',
+      defaultValue: false,
+    },
+    {
+      name: 'emailField',
+      type: 'group',
+      admin: {
+        condition: (data) => data.showEmailField,
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          label: 'Email Field Label',
+          defaultValue: 'Email Address',
+        },
+        {
+          name: 'placeholder',
+          type: 'text',
+          label: 'Email Field Placeholder',
+          defaultValue: 'Enter your email address',
+        },
+        {
+          name: 'buttonText',
+          type: 'text',
+          label: 'Send Button Text',
+          defaultValue: 'Send',
+        },
+        {
+          name: 'required',
+          type: 'checkbox',
+          label: 'Required Field',
+          defaultValue: true,
+        },
+      ],
+    },
     linkGroup({
       appearances: ['default', 'outline'],
       overrides: {
