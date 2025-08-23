@@ -418,7 +418,14 @@ export interface CallToActionBlock {
     placeholder?: string | null;
     buttonText?: string | null;
     required?: boolean | null;
+    size?: {
+      width?: number | null;
+      maxLength?: number | null;
+    };
   };
+  /**
+   * Add links to display alongside the call to action. This field is optional.
+   */
   links?:
     | {
         link: {
@@ -1061,6 +1068,12 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
         placeholder?: T;
         buttonText?: T;
         required?: T;
+        size?:
+          | T
+          | {
+              width?: T;
+              maxLength?: T;
+            };
       };
   links?:
     | T

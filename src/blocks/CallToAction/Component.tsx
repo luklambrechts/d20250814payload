@@ -83,6 +83,11 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
                   required={emailField.required}
                   disabled={isSubmitting}
                   className="mt-2"
+                  size={emailField.size?.width || 40}
+                  maxLength={emailField.size?.maxLength || 254}
+                  style={{
+                    width: `${(emailField.size?.width || 40) * 0.6}em`,
+                  }}
                 />
               </div>
               <Button
@@ -98,9 +103,13 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
               {submitStatus === 'error' && <p className="text-red-600 text-sm">{errorMessage}</p>}
             </form>
           )}
-          {(links || []).map(({ link }, i) => {
-            return <CMSLink key={i} size="lg" {...link} />
-          })}
+          {links && links.length > 0 && (
+            <>
+              {links.map(({ link }, i) => {
+                return <CMSLink key={i} size="lg" {...link} />
+              })}
+            </>
+          )}
         </div>
       </div>
     </div>
