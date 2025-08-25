@@ -23,7 +23,7 @@ The Call to Action block now includes an optional email input field that can be 
 Add these environment variables to your `.env` file:
 
 ```env
-# Email Provider (console, resend, sendgrid, nodemailer)
+# Email Provider (console, resend, sendgrid, nodemailer, gmail)
 EMAIL_PROVIDER=console
 
 # Email API Key (required for resend, sendgrid)
@@ -43,7 +43,25 @@ For development and testing, emails are logged to the console:
 EMAIL_PROVIDER=console
 ```
 
-#### 2. Resend
+#### 2. Gmail SMTP (Recommended for Gmail users)
+
+To use Gmail's SMTP server:
+
+```env
+EMAIL_PROVIDER=gmail
+GMAIL_USER=your-email@gmail.com
+GMAIL_PASS=your-app-password
+GMAIL_FROM=your-email@gmail.com
+```
+
+**Important**: For Gmail, you need to use an **App Password**, not your regular Gmail password. To set this up:
+
+1. Enable 2-Factor Authentication on your Google account
+2. Go to Google Account settings → Security → App passwords
+3. Generate an app password for "Mail"
+4. Use this app password as `GMAIL_PASS`
+
+#### 3. Resend
 
 For production, we recommend using [Resend](https://resend.com):
 
@@ -53,7 +71,7 @@ EMAIL_API_KEY=re_your_resend_api_key
 EMAIL_FROM=noreply@yourdomain.com
 ```
 
-#### 3. SendGrid
+#### 4. SendGrid
 
 Alternative email service:
 
@@ -63,7 +81,7 @@ EMAIL_API_KEY=SG.your_sendgrid_api_key
 EMAIL_FROM=noreply@yourdomain.com
 ```
 
-#### 4. Nodemailer
+#### 5. Nodemailer
 
 For custom SMTP configuration:
 
@@ -109,6 +127,7 @@ The email submission is handled by `/api/send-email` which:
 - Rate limiting should be implemented for production use
 - Consider adding CAPTCHA for spam prevention
 - Ensure your email provider is properly configured for your domain
+- For Gmail, always use App Passwords, never your regular password
 
 ## Troubleshooting
 
@@ -118,6 +137,7 @@ The email submission is handled by `/api/send-email` which:
 2. Verify API keys are valid
 3. Check server logs for error messages
 4. Ensure your domain is verified with your email provider
+5. For Gmail: Make sure you're using an App Password, not your regular password
 
 ### Frontend errors
 
@@ -128,3 +148,9 @@ The email submission is handled by `/api/send-email` which:
 ### Development testing
 
 Use the `console` provider to see emails logged in your server console without actually sending them.
+
+### Gmail-specific issues
+
+- **"Invalid login"**: Make sure you're using an App Password, not your regular Gmail password
+- **"Less secure app access"**: Gmail no longer supports this. Use App Passwords instead
+- **"Authentication failed"**: Check that 2-Factor Authentication is enabled on your Google account

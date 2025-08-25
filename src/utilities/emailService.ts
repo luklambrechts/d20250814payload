@@ -1,3 +1,5 @@
+import nodemailer from 'nodemailer'
+
 // Email service utility for sending emails
 // This file provides a simple interface that can be integrated with various email providers
 
@@ -9,16 +11,25 @@ export interface EmailData {
   html?: string
 }
 
+export interface GmailConfig {
+  user: string
+  pass: string
+  from?: string
+}
+
 export class EmailService {
   private apiKey?: string
-  private provider: 'resend' | 'sendgrid' | 'nodemailer' | 'console'
+  private gmailConfig?: GmailConfig
+  private provider: 'resend' | 'sendgrid' | 'nodemailer' | 'gmail' | 'console'
 
   constructor(
-    provider: 'resend' | 'sendgrid' | 'nodemailer' | 'console' = 'console',
+    provider: 'resend' | 'sendgrid' | 'nodemailer' | 'gmail' | 'console' = 'console',
     apiKey?: string,
+    gmailConfig?: GmailConfig,
   ) {
     this.provider = provider
     this.apiKey = apiKey
+    this.gmailConfig = gmailConfig
   }
 
   async send(emailData: EmailData): Promise<boolean> {
@@ -32,6 +43,8 @@ export class EmailService {
           return this.sendWithSendGrid(emailData)
         case 'nodemailer':
           return this.sendWithNodemailer(emailData)
+        case 'gmail':
+          return this.sendWithGmail(emailData)
         default:
           throw new Error(`Unsupported email provider: ${this.provider}`)
       }
@@ -131,10 +144,62 @@ export class EmailService {
     console.log('📧 Nodemailer email would be sent:', emailData)
     return true
   }
+
+  private async sendWithGmail(emailData: EmailData): Promise<boolean> {
+    if (!this.gmailConfig) {
+      throw new Error('Gmail configuration is required')
+    }
+
+    // Create transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: this.gmailConfig.user,
+        pass: this.gmailConfig.pass,
+      },
+    })
+
+    // Send email
+    const mailOptions = {
+      from: emailData.from || this.gmailConfig.from || this.gmailConfig.user,
+      to: emailData.to,
+      subject: emailData.subject,
+      text: emailData.text,
+      html: emailData.html,
+    }
+
+    const info = await transporter.sendMail(mailOptions)
+    console.log('📧 Gmail email sent successfully:', info.messageId)
+    return true
+  }
 }
 
-// Default email service instance
-export const emailService = new EmailService(
-  (process.env.EMAIL_PROVIDER as 'resend' | 'sendgrid' | 'nodemailer' | 'console') || 'console',
-  process.env.EMAIL_API_KEY,
-)
+// Parse Gmail config from environment variables
+const getGmailConfig = (): GmailConfig | undefined => {
+  const user = process.env.GMAIL_USER
+  const pass = process.env.GMAIL_PASS
+  const from = process.env.GMAIL_FROM
+
+  if (!user || !pass) {
+    return undefined
+  }
+
+  return {
+    user,
+    pass,
+    from,
+  }
+}
+
+// Create email service instance with current environment variables
+const createEmailService = () => {
+  return new EmailService(
+    (process.env.EMAIL_PROVIDER as 'resend' | 'sendgrid' | 'nodemailer' | 'gmail' | 'console') ||
+      'console',
+    process.env.EMAIL_API_KEY,
+    getGmailConfig(),
+  )
+}
+
+// Default email service instance - lazy loaded
+export const emailService = createEmailService()
