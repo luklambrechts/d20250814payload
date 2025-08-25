@@ -1,6 +1,7 @@
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
 
 import { contactForm as contactFormData } from './contact-form'
+import { homepageContactForm as homepageContactFormData } from './homepage-contact-form'
 import { contact as contactPageData } from './contact-page'
 import { home } from './home'
 import { image1 } from './image-1'
@@ -265,13 +266,25 @@ export const seed = async ({
     data: contactFormData,
   })
 
+  payload.logger.info(`— Seeding homepage contact form...`)
+
+  const homepageContactForm = await payload.create({
+    collection: 'forms',
+    depth: 0,
+    data: homepageContactFormData,
+  })
+
   payload.logger.info(`— Seeding pages...`)
 
   const [_, contactPage] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+      data: home({
+        heroImage: imageHomeDoc,
+        metaImage: image2Doc,
+        homepageContactForm: homepageContactForm,
+      }),
     }),
     payload.create({
       collection: 'pages',

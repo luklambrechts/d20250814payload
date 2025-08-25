@@ -1,14 +1,16 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
-import type { Media } from '@/payload-types'
+import type { Media, Form } from '@/payload-types'
 
 type HomeArgs = {
   heroImage: Media
   metaImage: Media
+  homepageContactForm: Form
 }
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
   heroImage,
   metaImage,
+  homepageContactForm,
 }) => {
   return {
     slug: 'home',
@@ -568,6 +570,61 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         },
         populateBy: 'collection',
         relationTo: 'posts',
+      },
+      {
+        blockName: 'Homepage Contact Form',
+        blockType: 'formBlock',
+        enableIntro: true,
+        introContent: {
+          root: {
+            type: 'root',
+            children: [
+              {
+                type: 'heading',
+                children: [
+                  {
+                    type: 'text',
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Contact Us',
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                tag: 'h2',
+                version: 1,
+              },
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    type: 'text',
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: "Get in touch with us using the form below. We'll get back to you as soon as possible.",
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            version: 1,
+          },
+        },
+        form: homepageContactForm.id,
       },
       {
         blockName: 'CTA',
