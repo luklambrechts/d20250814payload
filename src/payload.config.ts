@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -89,4 +90,17 @@ export default buildConfig({
     },
     tasks: [],
   },
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.GMAIL_USER!,
+    defaultFromName: 'My Payload App',
+    transportOptions: {
+      host: 'smtp.gmail.com',
+      port: 587, // of 465 met TLS
+      secure: false, // true als je port 465 gebruikt
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS, // App-wachtwoord
+      },
+    },
+  }),
 })
