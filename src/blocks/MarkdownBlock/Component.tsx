@@ -47,7 +47,10 @@ export const MarkdownBlock: React.FC<MarkdownBlockProps> = ({ md, className }) =
           },
           pre: ({ children, ...props }) => {
             // Check if children is a code element
-            const child = React.Children.only(children) as React.ReactElement
+            const child = React.Children.only(children) as React.ReactElement<{
+              className?: string
+              children?: React.ReactNode
+            }>
             if (child?.type === 'code') {
               const codeClassName = child.props.className
               const codeContent = child.props.children
