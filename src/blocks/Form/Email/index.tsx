@@ -8,6 +8,33 @@ import React from 'react'
 import { Error } from '../Error'
 import { Width } from '../Width'
 
+// Personal email domains that are not allowed
+const PERSONAL_EMAIL_DOMAINS = [
+  'outlook.com',
+  'live.com',
+  'hotmail.com',
+  'skynet.be',
+  'proximus.be',
+  'telenet.be',
+]
+
+// Custom validation function
+const validateCompanyEmail = (value: string) => {
+  if (!value) return true // Let required validation handle empty values
+
+  const emailRegex = /^\S[^\s@]*@\S+$/
+  if (!emailRegex.test(value)) {
+    return 'Please enter a valid email address'
+  }
+
+  const domain = value.split('@')[1]?.toLowerCase()
+  if (domain && PERSONAL_EMAIL_DOMAINS.includes(domain)) {
+    return 'This is not a company email-address, please use your professional email-adress'
+  }
+
+  return true
+}
+
 export const Email: React.FC<
   EmailField & {
     errors: Partial<FieldErrorsImpl>
@@ -29,7 +56,10 @@ export const Email: React.FC<
         defaultValue={defaultValue}
         id={name}
         type="text"
-        {...register(name, { pattern: /^\S[^\s@]*@\S+$/, required })}
+        {...register(name, {
+          validate: validateCompanyEmail,
+          required: required ? 'This field is required' : false,
+        })}
       />
 
       {errors[name] && <Error name={name} />}
