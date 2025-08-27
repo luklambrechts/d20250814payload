@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
+import { cn } from '@/utilities/ui'
 import { Button } from '@/components/ui/button'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
@@ -17,6 +18,7 @@ export type FormBlockType = {
   enableIntro: boolean
   form: FormType
   introContent?: SerializedEditorState
+  customClassName?: string
 }
 
 export const FormBlock: React.FC<
@@ -29,6 +31,7 @@ export const FormBlock: React.FC<
     form: formFromProps,
     form: { id: formID, confirmationMessage, confirmationType, redirect, submitButtonLabel } = {},
     introContent,
+    customClassName,
   } = props
 
   const formMethods = useForm({
@@ -114,7 +117,7 @@ export const FormBlock: React.FC<
   )
 
   return (
-    <div className="container lg:max-w-[48rem]">
+    <div className={cn('container lg:max-w-[48rem]', customClassName)}>
       {enableIntro && introContent && !hasSubmitted && (
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}

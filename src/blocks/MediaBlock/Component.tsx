@@ -27,6 +27,7 @@ export const MediaBlock: React.FC<Props> = (props) => {
     media,
     staticImage,
     disableInnerContainer,
+    customClassName,
   } = props
 
   let caption
@@ -40,6 +41,7 @@ export const MediaBlock: React.FC<Props> = (props) => {
           container: enableGutter,
         },
         className,
+        customClassName,
       )}
     >
       {(media || staticImage) && (

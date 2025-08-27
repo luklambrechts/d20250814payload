@@ -2,6 +2,7 @@ import type { Block, Field } from 'payload'
 
 import {
   FixedToolbarFeature,
+  AlignFeature,
   HeadingFeature,
   InlineToolbarFeature,
   lexicalEditor,
@@ -58,6 +59,7 @@ const columnFields: Field[] = [
           }),
           FixedToolbarFeature(),
           InlineToolbarFeature(),
+          AlignFeature(),
         ]
       },
     }),
@@ -82,6 +84,14 @@ export const Content: Block = {
   slug: 'content',
   interfaceName: 'ContentBlock',
   fields: [
+    {
+      name: 'customClassName',
+      type: 'text',
+      label: 'Custom CSS Classes',
+      admin: {
+        description: 'Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")',
+      },
+    },
     {
       name: 'columns',
       type: 'array',

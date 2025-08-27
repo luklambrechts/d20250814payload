@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 
 import type { CallToActionBlock as CTABlockProps } from '@/payload-types'
+import { cn } from '@/utilities/ui'
 
 import RichText from '@/components/RichText'
 import { CMSLink } from '@/components/Link'
@@ -10,11 +11,41 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { sendEmailAction } from './actions'
 
+// Helper function to get alignment class from rich text data
+const getAlignmentClass = (richTextData: any): string => {
+  if (!richTextData || !richTextData.root || !richTextData.root.children) {
+    return 'text-left'
+  }
+
+  // Check if any child has alignment format
+  for (const child of richTextData.root.children) {
+    if (child.format) {
+      switch (child.format) {
+        case 'left':
+        case 'start':
+          return 'text-left'
+        case 'center':
+          return 'text-center'
+        case 'right':
+        case 'end':
+          return 'text-right'
+        case 'justify':
+          return 'text-justify'
+        default:
+          return 'text-left'
+      }
+    }
+  }
+
+  return 'text-left'
+}
+
 export const CallToActionBlock: React.FC<CTABlockProps> = ({
   links,
   richText,
   showEmailField,
   emailField,
+  customClassName,
 }) => {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -44,10 +75,12 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
     }
   }
 
+  const alignmentClass = getAlignmentClass(richText)
+
   return (
-    <div className="container">
+    <div className={cn('container', customClassName)}>
       <div className="bg-card rounded border-border border p-4 flex flex-col gap-8 md:flex-row md:justify-between md:items-center">
-        <div className="max-w-[48rem] flex items-center">
+        <div className={`max-w-[48rem] flex items-center ${alignmentClass}`}>
           {richText && <RichText className="mb-0" data={richText} enableGutter={false} />}
         </div>
         <div className="flex flex-col gap-8">

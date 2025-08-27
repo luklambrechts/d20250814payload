@@ -397,6 +397,10 @@ export interface User {
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
+  /**
+   * Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")
+   */
+  customClassName?: string | null;
   richText?: {
     root: {
       type: string;
@@ -459,6 +463,10 @@ export interface CallToActionBlock {
  * via the `definition` "ContentBlock".
  */
 export interface ContentBlock {
+  /**
+   * Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")
+   */
+  customClassName?: string | null;
   columns?:
     | {
         size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
@@ -509,6 +517,10 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
+  /**
+   * Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")
+   */
+  customClassName?: string | null;
   media: string | Media;
   id?: string | null;
   blockName?: string | null;
@@ -519,6 +531,10 @@ export interface MediaBlock {
  * via the `definition` "ArchiveBlock".
  */
 export interface ArchiveBlock {
+  /**
+   * Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")
+   */
+  customClassName?: string | null;
   introContent?: {
     root: {
       type: string;
@@ -553,6 +569,10 @@ export interface ArchiveBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
+  /**
+   * Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")
+   */
+  customClassName?: string | null;
   form: string | Form;
   enableIntro?: boolean | null;
   introContent?: {
@@ -1059,6 +1079,7 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "CallToActionBlock_select".
  */
 export interface CallToActionBlockSelect<T extends boolean = true> {
+  customClassName?: T;
   richText?: T;
   showEmailField?: T;
   emailField?:
@@ -1098,6 +1119,7 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
  * via the `definition` "ContentBlock_select".
  */
 export interface ContentBlockSelect<T extends boolean = true> {
+  customClassName?: T;
   columns?:
     | T
     | {
@@ -1124,6 +1146,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
  * via the `definition` "MediaBlock_select".
  */
 export interface MediaBlockSelect<T extends boolean = true> {
+  customClassName?: T;
   media?: T;
   id?: T;
   blockName?: T;
@@ -1133,6 +1156,7 @@ export interface MediaBlockSelect<T extends boolean = true> {
  * via the `definition` "ArchiveBlock_select".
  */
 export interface ArchiveBlockSelect<T extends boolean = true> {
+  customClassName?: T;
   introContent?: T;
   populateBy?: T;
   relationTo?: T;
@@ -1147,6 +1171,7 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
+  customClassName?: T;
   form?: T;
   enableIntro?: T;
   introContent?: T;

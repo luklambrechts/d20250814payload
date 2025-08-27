@@ -13,6 +13,14 @@ export const FormBlock: Block = {
   interfaceName: 'FormBlock',
   fields: [
     {
+      name: 'customClassName',
+      type: 'text',
+      label: 'Custom CSS Classes',
+      admin: {
+        description: 'Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")',
+      },
+    },
+    {
       name: 'form',
       type: 'relationship',
       relationTo: 'forms',
