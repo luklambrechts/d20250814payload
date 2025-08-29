@@ -1,34 +1,72 @@
 @startuml homepage
 entity Page {
+  /app/(frontend)/[slug]/page.tsx
+  --
   params: paramsPromise
 }
 entity PageClient {
+  /app/(frontend)/[slug]/page.client.tsx
+  --
   { setHeaderTheme } = useHeaderTheme()
   useEffect(() => {},[setHeaderTheme])
+  { ...page } = usePage()
+  { ...header } = useHeader()
+  { ...footer } = useFooter()
+  { ...global } = useGlobal()
+  { ...navigation } = useNavigation()
 }
 entity PayloadRedirects {
+  /components 
+  --
   disableNotFound: boolean
   url: string
 }
 entity LivePreviewListener {
+  /components
+  --
+  router = useRouter()
+}
+entity LivePreviewListener {
+  /components
+  --
   router = useRouter()
 }
 entity RenderHero {
+  /heros 
+  --
   type
 }
 entity HighImpactHero {
+  /heros
+  --
   links
   media
   richText
 }
 
 entity Media {
+  /components 
+  --
   ClassFontName
   htmlElement
   resource
 }
-
+entity ImageMedia {
+  /components/Media
+  --
+  alt
+  fill
+  pictureClassName
+  imgClassName
+  priority
+  resource
+  size
+  src
+  loading
+}
 entity VideoMedia {
+  /components/Media
+  --
   onClick
   resource
   videoClassName
@@ -36,8 +74,14 @@ entity VideoMedia {
   useRef
   useEffect
 }
-entity RenderBlocks
+entity RenderBlocks {
+  /blocks
+  --
+  blocks
+}
 entity ArchiveBlock {
+  /blocks 
+  --
   id
   categories
   introContent
@@ -46,31 +90,151 @@ entity ArchiveBlock {
   relationTo
   selectedDocs
 }
-entity ContentBlock
-entity CallToActionBlock
-entity FormBlock
-entity MediaBlock
+entity CMSLink {
+  /components/Link
+  --
+  {...link}
+  className
+}
+entity RichText {
+  /components 
+  --
+  className
+  enableProse
+  enableGutter
+  ...rest
+}
+entity ConvertRichText {
+  @payloadcms/richtext-lexical/react
+  --
+  converters
+  className
+}
+entity CollectionArchive {
+  /components 
+  --
+  posts
+}
+entity Card {
+  /components 
+  --
+  alignItems?
+  className?
+  doc?
+  relationTo?
+  showCategories?
+  title?
+  --
+  { card, link } = useClickableCard({})
+}
+entity ContentBlock {
+  /blocks
+  --
+  columns
+  customClassName
+}
+entity CallToActionBlock {
+  /blocks
+  --
+  links,
+  richText,
+  showEmailField,
+  emailField,
+  customClassName
+  --
+  [email] = useState('')
+  [isSubmitting] = useState(false)
+  [submitStatus] = useState()
+  [errorMessage] = useState('')
+}
+entity FormBlock {
+  /blocks/form
+  --
+  enableIntro
+  Form
+  introContent
+  customClassName
+  --
+  formMethods = useForm({...})
+  [isLoading] = useState()
+  [hasSubmitted] = useState()
+  [error] = useState()
+  router = useRouter()
+  onSubmit = useCallback()
+}
+entity MediaBlock {
+  /blocks
+  --
+  captionClassName
+  className
+  enableGutter
+  imgClassName
+  media
+  staticImage
+  disableInnerContainer
+  customClassName
+}
+entity FormProvider {
+  react-hook-form
+  --
+  {...formMethods}
+}
+entity Field {
+  /components/formblock
+  --
+  {...field}
+  {...formMethods}
+  control
+  errors
+  register
+  --
+  Checkbox 
+  Country
+  Email
+  Error 
+  Message 
+  Number
+  Select 
+  State 
+  Textarea
+  Width
+}
 
 
 Page --> PageClient
 Page --> PayloadRedirects
 Page --> LivePreviewListener
 Page --> RenderHero
+
 RenderHero --> HighImpactHero
 RenderHero --> LowImpactHero
 RenderHero --> MediumImpactHero
 HighImpactHero --> CMSLink
-CMSLink --> Button
 HighImpactHero --> Media
 Media --> VideoMedia
 Media --> ImageMedia
 HighImpactHero --> RichText
+RichText --> ConvertRichText
 Page --> RenderBlocks
 RenderBlocks --> ArchiveBlock
 RenderBlocks --> ContentBlock
 RenderBlocks --> CallToActionBlock
 RenderBlocks --> FormBlock
 RenderBlocks --> MediaBlock
-LivePreviewListener --> PayloadLivePreview
+ArchiveBlock --> RichText
+ArchiveBlock --> CollectionArchive
+CollectionArchive --> Card
+ContentBlock --> RichText
+ContentBlock --> CMSLink
+MediaBlock --> Media
+MediaBlock --> RichText
+FormBlock --> RichText
+FormBlock -->FormProvider
+FormProvider --> Field
+CallToActionBlock --> RichText
+
+
+
+
 
 @enduml

@@ -1,0 +1,12 @@
+localhost:3443 {
+	tls internal
+	reverse_proxy localhost:3000
+	servers {
+		protocols h1 h2 h3
+	}
+}
+
+# Disable automatic HTTP->HTTPS redirects
+{
+	auto_https disable_redirects
+}
