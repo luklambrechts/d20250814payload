@@ -1,4 +1,36 @@
 @startuml homepage
+entity HeaderThemeProvider {
+  /providers/HeaderTheme
+}
+entity ThemeProvider {
+  /providers/Theme
+}
+entity AdminBar {}
+entity Header {
+  /header/component.tsx
+}
+entity HeaderClient {
+  /header/component.client.tsx
+  --
+  data
+  --
+  [theme] = useState(null)
+  [headerTheme] = useHeaderTheme()
+  pathname = usePathname()
+  useEffect(()=>{}),[pathname]
+  useEffect(()=>{}),[headerTheme]
+}
+entity Logo {
+  /components/Logo/Logo
+}
+entity HeaderNav {
+  /header/nav
+  --
+  data
+}
+entity Footer {
+  /Footer/Component.tsx
+}
 entity Page {
   /app/(frontend)/[slug]/page.tsx
   --
@@ -20,11 +52,6 @@ entity PayloadRedirects {
   --
   disableNotFound: boolean
   url: string
-}
-entity LivePreviewListener {
-  /components
-  --
-  router = useRouter()
 }
 entity LivePreviewListener {
   /components
@@ -91,7 +118,7 @@ entity ArchiveBlock {
   selectedDocs
 }
 entity CMSLink {
-  /components/Link
+  /components
   --
   {...link}
   className
@@ -199,7 +226,17 @@ entity Field {
   Textarea
   Width
 }
-
+ThemeProvider --> HeaderThemeProvider
+HeaderThemeProvider --> Header
+HeaderThemeProvider --> Footer
+HeaderThemeProvider --> Page
+HeaderThemeProvider --> AdminBar
+Header --> HeaderClient
+HeaderClient --> Logo
+HeaderClient --> HeaderNav
+HeaderNav --> CMSLink
+Footer --> Logo
+Footer --> CMSLink
 
 Page --> PageClient
 Page --> PayloadRedirects
