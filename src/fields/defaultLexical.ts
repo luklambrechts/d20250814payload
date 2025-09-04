@@ -6,6 +6,7 @@ import {
   ParagraphFeature,
   lexicalEditor,
   UnderlineFeature,
+  UploadFeature,
   type LinkFields,
 } from '@payloadcms/richtext-lexical'
 
@@ -41,6 +42,20 @@ export const defaultLexical = lexicalEditor({
             }) as TextFieldSingleValidation,
           },
         ]
+      },
+    }),
+    UploadFeature({
+      collections: {
+        media: {
+          fields: [
+            {
+              name: 'alt',
+              type: 'text',
+              label: 'Alt Text',
+              required: true,
+            },
+          ],
+        },
       },
     }),
   ],

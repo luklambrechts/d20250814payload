@@ -1,14 +1,6 @@
 import type { Block, Field } from 'payload'
 
-import {
-  FixedToolbarFeature,
-  AlignFeature,
-  HeadingFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-  UploadFeature,
-} from '@payloadcms/richtext-lexical'
-
+import { defaultLexical } from '@/fields/defaultLexical'
 import { link } from '@/fields/link'
 
 const columnFields: Field[] = [
@@ -38,31 +30,7 @@ const columnFields: Field[] = [
   {
     name: 'richText',
     type: 'richText',
-    editor: lexicalEditor({
-      features: ({ rootFeatures }) => {
-        return [
-          ...rootFeatures,
-          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
-          UploadFeature({
-            collections: {
-              media: {
-                fields: [
-                  {
-                    name: 'alt',
-                    type: 'text',
-                    label: 'Alt Text',
-                    required: true,
-                  },
-                ],
-              },
-            },
-          }),
-          FixedToolbarFeature(),
-          InlineToolbarFeature(),
-          AlignFeature(),
-        ]
-      },
-    }),
+    editor: defaultLexical,
     label: false,
   },
   {
