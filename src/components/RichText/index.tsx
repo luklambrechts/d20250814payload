@@ -17,10 +17,12 @@ import type {
   BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
   MediaBlock as MediaBlockProps,
+  YouTubeBlock as YouTubeBlockProps,
 } from '@/payload-types'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { MarkdownBlock } from '@/blocks/MarkdownBlock/Component'
+import { YouTubeBlock } from '@/blocks/YouTube/Component'
 import { cn } from '@/utilities/ui'
 
 type MarkdownBlockProps = {
@@ -30,7 +32,12 @@ type MarkdownBlockProps = {
 type NodeTypes =
   | DefaultNodeTypes
   | SerializedBlockNode<
-      CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps | MarkdownBlockProps
+      | CTABlockProps
+      | MediaBlockProps
+      | BannerBlockProps
+      | CodeBlockProps
+      | MarkdownBlockProps
+      | YouTubeBlockProps
     >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
@@ -59,6 +66,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     ),
     code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
     cta: ({ node }) => <CallToActionBlock {...node.fields} />,
+    youtube: ({ node }) => <YouTubeBlock {...node.fields} disableInnerContainer={true} />,
     Markdown: ({ node }: { node: { fields: MarkdownBlockProps } }) => (
       <MarkdownBlock className="col-start-2" {...node.fields} />
     ),

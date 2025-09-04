@@ -191,7 +191,7 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | YouTubeBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -261,6 +261,15 @@ export interface Post {
 export interface Media {
   id: string;
   alt?: string | null;
+  mediaType: 'upload' | 'youtube';
+  /**
+   * Enter a YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)
+   */
+  youtubeUrl?: string | null;
+  /**
+   * Auto-extracted YouTube video ID
+   */
+  youtubeId?: string | null;
   caption?: {
     root: {
       type: string;
@@ -770,6 +779,31 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "YouTubeBlock".
+ */
+export interface YouTubeBlock {
+  /**
+   * Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")
+   */
+  customClassName?: string | null;
+  /**
+   * Enter a YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)
+   */
+  youtubeUrl: string;
+  /**
+   * Optional title for the video (used for accessibility)
+   */
+  title?: string | null;
+  /**
+   * Optional caption for the video
+   */
+  caption?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'youtube';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1059,6 +1093,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        youtube?: T | YouTubeBlockSelect<T>;
       };
   meta?:
     | T
@@ -1180,6 +1215,18 @@ export interface FormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "YouTubeBlock_select".
+ */
+export interface YouTubeBlockSelect<T extends boolean = true> {
+  customClassName?: T;
+  youtubeUrl?: T;
+  title?: T;
+  caption?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1215,6 +1262,9 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  mediaType?: T;
+  youtubeUrl?: T;
+  youtubeId?: T;
   caption?: T;
   updatedAt?: T;
   createdAt?: T;

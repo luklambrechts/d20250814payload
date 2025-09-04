@@ -11,6 +11,13 @@ import { fileURLToPath } from 'url'
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 
+// Helper function to extract YouTube video ID from URL
+const extractYouTubeId = (url: string): string | null => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+  const match = url.match(regExp)
+  return match && match[2].length === 11 ? match[2] : null
+}
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -27,6 +34,51 @@ export const Media: CollectionConfig = {
       name: 'alt',
       type: 'text',
       //required: true,
+    },
+    {
+      name: 'mediaType',
+      type: 'select',
+      defaultValue: 'upload',
+      options: [
+        {
+          label: 'File Upload',
+          value: 'upload',
+        },
+        {
+          label: 'YouTube Video',
+          value: 'youtube',
+        },
+      ],
+      required: true,
+    },
+    {
+      name: 'youtubeUrl',
+      type: 'text',
+      label: 'YouTube URL',
+      admin: {
+        condition: (_, { mediaType }) => mediaType === 'youtube',
+        description: 'Enter a YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)',
+      },
+      validate: (value, { siblingData }) => {
+        if (siblingData?.mediaType === 'youtube') {
+          if (!value) return 'YouTube URL is required when media type is YouTube'
+          const youtubeRegex =
+            /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[\w-]+/
+          if (!youtubeRegex.test(value)) {
+            return 'Please enter a valid YouTube URL'
+          }
+        }
+        return true
+      },
+    },
+    {
+      name: 'youtubeId',
+      type: 'text',
+      admin: {
+        condition: (_, { mediaType }) => mediaType === 'youtube',
+        readOnly: true,
+        description: 'Auto-extracted YouTube video ID',
+      },
     },
     {
       name: 'caption',
@@ -74,6 +126,29 @@ export const Media: CollectionConfig = {
         width: 1200,
         height: 630,
         crop: 'center',
+      },
+    ],
+  },
+  // Make upload optional for YouTube videos
+  admin: {
+    useAsTitle: 'alt',
+  },
+  hooks: {
+    beforeChange: [
+      ({ data, req }) => {
+        // Auto-extract YouTube ID when YouTube URL is provided
+        if (data?.mediaType === 'youtube' && data?.youtubeUrl) {
+          const videoId = extractYouTubeId(data.youtubeUrl)
+          if (videoId) {
+            data.youtubeId = videoId
+            // For YouTube videos, we don't need a file upload
+            // Set a dummy filename to satisfy the upload requirement
+            if (!data.filename) {
+              data.filename = `youtube-${videoId}.mp4`
+            }
+          }
+        }
+        return data
       },
     ],
   },
