@@ -1,7 +1,6 @@
 import type { Block } from 'payload'
 
 import { defaultLexical } from '@/fields/defaultLexical'
-import { linkGroup } from '../../fields/linkGroup'
 
 export const CallToAction: Block = {
   slug: 'cta',

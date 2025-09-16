@@ -34,7 +34,10 @@ async function testEmail() {
   )
 
   // Debug: Check if emailService is properly configured
-  console.log('Email service provider:', (emailService as any).provider)
+  console.log(
+    'Email service provider:',
+    (emailService as unknown as { provider?: string }).provider,
+  )
 
   try {
     const result = await emailService.send({

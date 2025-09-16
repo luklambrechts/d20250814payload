@@ -55,7 +55,7 @@ async function testGmailAuth() {
   } catch (error) {
     console.error('❌ Gmail authentication failed:', error)
 
-    if (error.code === 'EAUTH') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'EAUTH') {
       console.log('\n🔧 Troubleshooting tips:')
       console.log('1. Make sure 2-Factor Authentication is enabled on your Google account')
       console.log('2. Generate a new App Password:')

@@ -12,13 +12,19 @@ import { Label } from '@/components/ui/label'
 import { sendEmailAction } from './actions'
 
 // Helper function to get alignment class from rich text data
-const getAlignmentClass = (richTextData: any): string => {
-  if (!richTextData || !richTextData.root || !richTextData.root.children) {
+const getAlignmentClass = (richTextData: unknown): string => {
+  if (!richTextData || typeof richTextData !== 'object' || richTextData === null) {
+    return 'text-left'
+  }
+
+  const data = richTextData as { root?: { children?: Array<{ format?: string }> } }
+
+  if (!data.root || !data.root.children) {
     return 'text-left'
   }
 
   // Check if any child has alignment format
-  for (const child of richTextData.root.children) {
+  for (const child of data.root.children) {
     if (child.format) {
       switch (child.format) {
         case 'left':
@@ -67,7 +73,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
         setSubmitStatus('error')
         setErrorMessage(result.message || 'Failed to send email')
       }
-    } catch (error) {
+    } catch (_error) {
       setSubmitStatus('error')
       setErrorMessage('Network error occurred')
     } finally {

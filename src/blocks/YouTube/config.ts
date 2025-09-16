@@ -20,11 +20,13 @@ export const YouTube: Block = {
       admin: {
         description: 'Enter a YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)',
       },
-      validate: (value) => {
-        if (!value) return 'YouTube URL is required'
+      validate: (value: string | string[] | null | undefined) => {
+        if (!value || (Array.isArray(value) && value.length === 0)) return 'YouTube URL is required'
+        const stringValue = Array.isArray(value) ? value[0] : value
+        if (!stringValue) return 'YouTube URL is required'
         const youtubeRegex =
           /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[\w-]+/
-        if (!youtubeRegex.test(value)) {
+        if (!youtubeRegex.test(stringValue)) {
           return 'Please enter a valid YouTube URL'
         }
         return true

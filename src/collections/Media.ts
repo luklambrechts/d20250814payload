@@ -59,12 +59,18 @@ export const Media: CollectionConfig = {
         condition: (_, { mediaType }) => mediaType === 'youtube',
         description: 'Enter a YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)',
       },
-      validate: (value, { siblingData }) => {
+      validate: (
+        value: string | string[] | null | undefined,
+        { siblingData }: { siblingData?: { mediaType?: string } },
+      ) => {
         if (siblingData?.mediaType === 'youtube') {
-          if (!value) return 'YouTube URL is required when media type is YouTube'
+          if (!value || (Array.isArray(value) && value.length === 0))
+            return 'YouTube URL is required when media type is YouTube'
+          const stringValue = Array.isArray(value) ? value[0] : value
+          if (!stringValue) return 'YouTube URL is required when media type is YouTube'
           const youtubeRegex =
             /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[\w-]+/
-          if (!youtubeRegex.test(value)) {
+          if (!youtubeRegex.test(stringValue)) {
             return 'Please enter a valid YouTube URL'
           }
         }
@@ -135,7 +141,7 @@ export const Media: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      ({ data, req }) => {
+      ({ data, req: _req }) => {
         // Auto-extract YouTube ID when YouTube URL is provided
         if (data?.mediaType === 'youtube' && data?.youtubeUrl) {
           const videoId = extractYouTubeId(data.youtubeUrl)
