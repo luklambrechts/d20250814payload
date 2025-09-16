@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_20", "pnpm"]
+
+[phases.install]
+cmd = "pnpm i --frozen-lockfile --prod"   # geen devDependencies
+
+[phases.build]
+cmd = "pnpm run build"
+
+[start]
+cmd = "pnpm start"
