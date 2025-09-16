@@ -30,8 +30,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="bg-[#dad2bb] container relative" {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-4 flex justify-between">
+    <header className="bg-[#dad2bb] relative" {...(theme ? { 'data-theme': theme } : {})}>
+      <div className="container py-4 flex justify-between">
         <Link href="/">
           <Logo loading="eager" priority="high" />
         </Link>

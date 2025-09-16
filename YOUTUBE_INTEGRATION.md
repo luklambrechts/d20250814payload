@@ -278,11 +278,17 @@ Page Editor → Layout → Add Block → Select "YouTube Video" → Configure
    - **Location**: `src/blocks/YouTube/Component.tsx`
    - **Fix**: Change Props type from `{ block: YouTubeBlockType }` to `YouTubeBlockType & { disableInnerContainer?: boolean }`
 
-4. **Invalid URL format**
+4. **"parseEditorState: type "heading" + not found"**
+   - **Solution**: Add HeadingFeature to defaultLexical configuration
+   - **Location**: `src/fields/defaultLexical.ts`
+   - **Fix**: Add `HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] })` to features array
+   - **Cause**: Existing content contains heading elements that the new editor configuration couldn't parse
+
+5. **Invalid URL format**
    - **Solution**: Ensure URL matches supported formats
    - **Check**: URL validation error messages
 
-5. **Video not displaying**
+6. **Video not displaying**
    - **Solution**: Check if video ID was extracted correctly
    - **Debug**: Check browser console for errors
 
