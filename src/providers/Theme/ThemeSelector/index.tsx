@@ -19,18 +19,27 @@ export const ThemeSelector: React.FC = () => {
   const [value, setValue] = useState('')
 
   const onThemeChange = (themeToSet: Theme & 'auto') => {
-    if (themeToSet === 'auto') {
-      setTheme(null)
-      setValue('auto')
-    } else {
-      setTheme(themeToSet)
-      setValue(themeToSet)
-    }
+    // Dark mode deactivated - always force light theme
+    setTheme('light')
+    setValue('light')
+
+    // Original code preserved but commented out:
+    // if (themeToSet === 'auto') {
+    //   setTheme(null)
+    //   setValue('auto')
+    // } else {
+    //   setTheme(themeToSet)
+    //   setValue(themeToSet)
+    // }
   }
 
   React.useEffect(() => {
-    const preference = window.localStorage.getItem(themeLocalStorageKey)
-    setValue(preference ?? 'auto')
+    // Dark mode deactivated - always set to light
+    setValue('light')
+
+    // Original code preserved but commented out:
+    // const preference = window.localStorage.getItem(themeLocalStorageKey)
+    // setValue(preference ?? 'auto')
   }, [])
 
   return (
@@ -42,9 +51,11 @@ export const ThemeSelector: React.FC = () => {
         <SelectValue placeholder="Theme" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="auto">Auto</SelectItem>
         <SelectItem value="light">Light</SelectItem>
+        {/* Dark mode options deactivated but preserved in comments:
+        <SelectItem value="auto">Auto</SelectItem>
         <SelectItem value="dark">Dark</SelectItem>
+        */}
       </SelectContent>
     </Select>
   )

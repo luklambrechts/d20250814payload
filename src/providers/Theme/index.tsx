@@ -21,34 +21,47 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   )
 
   const setTheme = useCallback((themeToSet: Theme | null) => {
-    if (themeToSet === null) {
-      window.localStorage.removeItem(themeLocalStorageKey)
-      const implicitPreference = getImplicitPreference()
-      document.documentElement.setAttribute('data-theme', implicitPreference || '')
-      if (implicitPreference) setThemeState(implicitPreference)
-    } else {
-      setThemeState(themeToSet)
-      window.localStorage.setItem(themeLocalStorageKey, themeToSet)
-      document.documentElement.setAttribute('data-theme', themeToSet)
-    }
+    // Dark mode deactivated - always force light theme
+    const forcedTheme = 'light'
+    setThemeState(forcedTheme)
+    window.localStorage.setItem(themeLocalStorageKey, forcedTheme)
+    document.documentElement.setAttribute('data-theme', forcedTheme)
+
+    // Original code preserved but commented out:
+    // if (themeToSet === null) {
+    //   window.localStorage.removeItem(themeLocalStorageKey)
+    //   const implicitPreference = getImplicitPreference()
+    //   document.documentElement.setAttribute('data-theme', implicitPreference || '')
+    //   if (implicitPreference) setThemeState(implicitPreference)
+    // } else {
+    //   setThemeState(themeToSet)
+    //   window.localStorage.setItem(themeLocalStorageKey, themeToSet)
+    //   document.documentElement.setAttribute('data-theme', themeToSet)
+    // }
   }, [])
 
   useEffect(() => {
-    let themeToSet: Theme = defaultTheme
-    const preference = window.localStorage.getItem(themeLocalStorageKey)
+    // Dark mode deactivated - always force light theme
+    const forcedTheme: Theme = 'light'
+    document.documentElement.setAttribute('data-theme', forcedTheme)
+    setThemeState(forcedTheme)
 
-    if (themeIsValid(preference)) {
-      themeToSet = preference
-    } else {
-      const implicitPreference = getImplicitPreference()
+    // Original code preserved but commented out:
+    // let themeToSet: Theme = defaultTheme
+    // const preference = window.localStorage.getItem(themeLocalStorageKey)
 
-      if (implicitPreference) {
-        themeToSet = implicitPreference
-      }
-    }
+    // if (themeIsValid(preference)) {
+    //   themeToSet = preference
+    // } else {
+    //   const implicitPreference = getImplicitPreference()
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
-    setThemeState(themeToSet)
+    //   if (implicitPreference) {
+    //     themeToSet = implicitPreference
+    //   }
+    // }
+
+    // document.documentElement.setAttribute('data-theme', themeToSet)
+    // setThemeState(themeToSet)
   }, [])
 
   return <ThemeContext value={{ setTheme, theme }}>{children}</ThemeContext>
