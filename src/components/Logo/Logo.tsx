@@ -15,7 +15,7 @@ export const Logo = (props: Props) => {
   const priority = priorityFromProps || 'low'
 
   // Construct the full URL for the logo
-  const logoUrl = `${getClientSideURL()}/Media/LenowebLogo.svg`
+  const logoUrl = `${getClientSideURL()}/media/LenowebLogo.svg`
 
   return (
     /* eslint-disable @next/next/no-img-element */
