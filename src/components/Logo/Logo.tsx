@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import React from 'react'
+import { getClientSideURL } from '@/utilities/getURL'
 
 interface Props {
   className?: string
@@ -13,6 +14,9 @@ export const Logo = (props: Props) => {
   const loading = loadingFromProps || 'lazy'
   const priority = priorityFromProps || 'low'
 
+  // Construct the full URL for the logo
+  const logoUrl = `${getClientSideURL()}/Media/LenowebLogo.svg`
+
   return (
     /* eslint-disable @next/next/no-img-element */
     <img
@@ -23,7 +27,7 @@ export const Logo = (props: Props) => {
       fetchPriority={priority}
       decoding="async"
       className={clsx('max-w-[9.375rem] w-full h-[34px]', className)}
-      src="/Media/LenowebLogo.svg"
+      src={logoUrl}
     />
   )
 }
