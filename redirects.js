@@ -12,7 +12,20 @@ const redirects = async () => {
     source: '/:path((?!ie-incompatible.html$).*)', // all pages except the incompatibility page
   }
 
-  const redirects = [internetExplorerRedirect]
+  // Redirect www to non-www
+  const wwwRedirect = {
+    source: '/:path*',
+    has: [
+      {
+        type: 'host',
+        value: 'www.lenoweb.be',
+      },
+    ],
+    destination: 'https://lenoweb.be/:path*',
+    permanent: true,
+  }
+
+  const redirects = [internetExplorerRedirect, wwwRedirect]
 
   return redirects
 }
