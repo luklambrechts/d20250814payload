@@ -5,8 +5,8 @@ import React, { createContext, useCallback, use, useEffect, useState } from 'rea
 import type { Theme, ThemeContextType } from './types'
 
 import canUseDOM from '@/utilities/canUseDOM'
-import { defaultTheme, getImplicitPreference, themeLocalStorageKey } from './shared'
-import { themeIsValid } from './types'
+// import { defaultTheme, getImplicitPreference, themeLocalStorageKey } from './shared'
+// import { themeIsValid } from './types'
 
 const initialContext: ThemeContextType = {
   setTheme: () => null,
@@ -20,11 +20,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     canUseDOM ? (document.documentElement.getAttribute('data-theme') as Theme) : undefined,
   )
 
-  const setTheme = useCallback((themeToSet: Theme | null) => {
+  const setTheme = useCallback((_themeToSet: Theme | null) => {
     // Dark mode deactivated - always force light theme
     const forcedTheme = 'light'
     setThemeState(forcedTheme)
-    window.localStorage.setItem(themeLocalStorageKey, forcedTheme)
+    window.localStorage.setItem('theme', forcedTheme)
     document.documentElement.setAttribute('data-theme', forcedTheme)
 
     // Original code preserved but commented out:

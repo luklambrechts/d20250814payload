@@ -85,18 +85,18 @@ export const Posts: CollectionConfig<'posts'> = {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
-              validate: (value, options) => {
+              validate: (value: any, _options: any) => {
                 // Allow null/undefined values
-                if (!value) return true
+                if (!value) return true as const
 
                 // If value exists, check if it's a valid relationship
                 if (typeof value === 'string' || (typeof value === 'object' && value.id)) {
-                  return true
+                  return true as const
                 }
 
                 // If it's an invalid relationship, allow it but log a warning
                 console.warn('Invalid hero image relationship detected:', value)
-                return true
+                return true as const
               },
             },
             {
@@ -236,7 +236,7 @@ export const Posts: CollectionConfig<'posts'> = {
   ],
   hooks: {
     beforeChange: [
-      ({ data, req }) => {
+      ({ data, req: _req }) => {
         // Clean up invalid media relationships
         if (data.heroImage && typeof data.heroImage === 'object' && !data.heroImage.id) {
           console.warn('Cleaning up invalid hero image relationship')

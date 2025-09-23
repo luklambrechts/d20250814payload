@@ -17,18 +17,18 @@ export const MediaBlock: Block = {
       type: 'upload',
       relationTo: 'media',
       required: false, // Make optional to prevent validation errors
-      validate: (value, options) => {
+      validate: (value: any, _options: any) => {
         // Allow null/undefined values
-        if (!value) return true
+        if (!value) return true as const
 
         // If value exists, check if it's a valid relationship
         if (typeof value === 'string' || (typeof value === 'object' && value.id)) {
-          return true
+          return true as const
         }
 
         // If it's an invalid relationship, allow it but log a warning
         console.warn('Invalid media relationship detected:', value)
-        return true
+        return true as const
       },
     },
   ],

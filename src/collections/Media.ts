@@ -101,8 +101,7 @@ export const Media: CollectionConfig = {
     staticDir: path.resolve(dirname, '../../public/media'),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
-    // Add file size and type restrictions
-    maxSize: 12 * 1024 * 1024, // 12MB
+    // Add file type restrictions
     mimeTypes: ['image/*', 'video/*'],
     imageSizes: [
       {

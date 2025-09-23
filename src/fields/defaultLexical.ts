@@ -1,4 +1,4 @@
-import type { TextFieldSingleValidation } from 'payload'
+// import type { TextFieldSingleValidation } from 'payload'
 import {
   BoldFeature,
   HeadingFeature,
@@ -8,7 +8,7 @@ import {
   lexicalEditor,
   UnderlineFeature,
   UploadFeature,
-  type LinkFields,
+  // type LinkFields,
 } from '@payloadcms/richtext-lexical'
 
 export const defaultLexical = lexicalEditor({
@@ -26,14 +26,6 @@ export const defaultLexical = lexicalEditor({
             return {
               ...field,
               required: false, // Make doc field optional to prevent validation errors
-              validate: (value, options) => {
-                // Allow empty or null values for doc field
-                if (!value || value === null || value === undefined) {
-                  return true
-                }
-                // If value exists, validate it normally
-                return true
-              },
             }
           }
           return field
