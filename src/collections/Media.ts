@@ -33,7 +33,7 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      //required: true,
+      required: true,
     },
     {
       name: 'mediaType',
@@ -101,6 +101,9 @@ export const Media: CollectionConfig = {
     staticDir: path.resolve(dirname, '../../public/media'),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
+    // Add file size and type restrictions
+    maxSize: 12 * 1024 * 1024, // 12MB
+    mimeTypes: ['image/*', 'video/*'],
     imageSizes: [
       {
         name: 'thumbnail',
@@ -154,6 +157,21 @@ export const Media: CollectionConfig = {
             }
           }
         }
+        return data
+      },
+    ],
+    beforeValidate: [
+      ({ data, req: _req }) => {
+        // Ensure alt text is provided for accessibility
+        if (data?.mediaType === 'upload' && !data?.alt) {
+          throw new Error('Alt text is required for uploaded media files')
+        }
+
+        // For YouTube videos, ensure URL is provided
+        if (data?.mediaType === 'youtube' && !data?.youtubeUrl) {
+          throw new Error('YouTube URL is required for YouTube media type')
+        }
+
         return data
       },
     ],
