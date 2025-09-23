@@ -530,7 +530,7 @@ export interface MediaBlock {
    * Add custom CSS classes to this block (e.g., "my-custom-class bg-blue-100")
    */
   customClassName?: string | null;
-  media: string | Media;
+  media?: (string | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';

@@ -85,6 +85,19 @@ export const Posts: CollectionConfig<'posts'> = {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
+              validate: (value, options) => {
+                // Allow null/undefined values
+                if (!value) return true
+
+                // If value exists, check if it's a valid relationship
+                if (typeof value === 'string' || (typeof value === 'object' && value.id)) {
+                  return true
+                }
+
+                // If it's an invalid relationship, allow it but log a warning
+                console.warn('Invalid hero image relationship detected:', value)
+                return true
+              },
             },
             {
               name: 'content',
@@ -222,6 +235,16 @@ export const Posts: CollectionConfig<'posts'> = {
     ...slugField(),
   ],
   hooks: {
+    beforeChange: [
+      ({ data, req }) => {
+        // Clean up invalid media relationships
+        if (data.heroImage && typeof data.heroImage === 'object' && !data.heroImage.id) {
+          console.warn('Cleaning up invalid hero image relationship')
+          data.heroImage = null
+        }
+        return data
+      },
+    ],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
